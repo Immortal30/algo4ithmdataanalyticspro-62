@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 200 98% 60%;
+    --primary-foreground: 240 10% 3.9%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Dashboard specific colors */
+    --dashboard-primary: 200 98% 60%;
+    --dashboard-secondary: 150 86% 65%;
+    --dashboard-accent: 270 95% 75%;
+    --dashboard-warning: 45 93% 58%;
+    --dashboard-success: 142 76% 36%;
+    --dashboard-danger: 0 84% 60%;
+    --dashboard-info: 210 100% 70%;
+    --dashboard-neutral: 220 14% 70%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(200 98% 60%), hsl(150 86% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(240 3.7% 15.9%), hsl(240 10% 3.9%));
+    --gradient-card: linear-gradient(135deg, hsl(240 3.7% 15.9% / 0.8), hsl(240 10% 3.9% / 0.9));
+    --gradient-analytics: linear-gradient(135deg, hsl(270 95% 75%), hsl(200 98% 60%));
+    --gradient-insights: linear-gradient(135deg, hsl(45 93% 58%), hsl(150 86% 65%));
+
+    /* Glass morphism */
+    --glass-bg: hsl(240 3.7% 15.9% / 0.6);
+    --glass-border: hsl(0 0% 98% / 0.1);
+
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(200 98% 60% / 0.3);
+    --shadow-card: 0 10px 30px -10px hsl(240 10% 3.9% / 0.5);
+    --shadow-analytics: 0 0 30px hsl(270 95% 75% / 0.2);
+    --shadow-insights: 0 0 30px hsl(45 93% 58% / 0.2);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 200 98% 60%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .dashboard-card {
+    @apply bg-gradient-to-br from-glass-bg to-transparent backdrop-blur-sm border border-glass-border;
+    @apply hover:shadow-lg hover:shadow-dashboard-primary/10 transition-all duration-300;
+  }
+
+  .analytics-card {
+    @apply bg-gradient-to-br from-dashboard-accent/5 to-dashboard-primary/5;
+    @apply border border-dashboard-accent/20 backdrop-blur-sm;
+    @apply hover:shadow-lg hover:shadow-dashboard-accent/20 transition-all duration-300;
+  }
+
+  .insights-card {
+    @apply bg-gradient-to-br from-dashboard-warning/5 to-dashboard-success/5;
+    @apply border border-dashboard-warning/20 backdrop-blur-sm;
+    @apply hover:shadow-lg hover:shadow-dashboard-warning/20 transition-all duration-300;
+  }
+
+  .shadow-analytics {
+    box-shadow: var(--shadow-analytics);
+  }
+
+  .shadow-insights {
+    box-shadow: var(--shadow-insights);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .metric-card {
+    @apply p-4 rounded-lg border border-glass-border bg-card/50;
+    @apply hover:bg-card/70 transition-all duration-200;
+  }
+
+  .data-table {
+    @apply w-full text-sm border-collapse;
+  }
+
+  .data-table th {
+    @apply text-left p-3 font-medium text-muted-foreground whitespace-nowrap;
+    @apply bg-card/50 sticky top-0 z-10;
+  }
+
+  .data-table td {
+    @apply p-3 text-foreground whitespace-nowrap;
+    @apply border-b border-glass-border/50;
+  }
+
+  .data-table tbody tr:hover {
+    @apply bg-muted/5 transition-colors duration-150;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-dashboard-primary to-dashboard-secondary;
+    @apply bg-clip-text text-transparent;
+  }
+}
