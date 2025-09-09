@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   BarChart3, 
   LineChart, 
@@ -13,11 +14,15 @@ import {
   Eye,
   Filter,
   Download,
-  RefreshCw
+  RefreshCw,
+  Sigma,
+  Grid3X3
 } from "lucide-react";
 import { ChartGenerator } from "./ChartGenerator";
 import { KPICard } from "./KPICard";
 import { VirtualizedTable } from "./VirtualizedTable";
+import { DistributionChart } from "./DistributionChart";
+import { CorrelationMatrix } from "./CorrelationMatrix";
 
 interface DataDashboardProps {
   data: any[];
@@ -121,10 +126,18 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
 
       {/* Main Dashboard Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
+        <TabsList className="grid w-full grid-cols-5 mb-6">
           <TabsTrigger value="overview" className="flex items-center space-x-2">
             <TrendingUp className="h-4 w-4" />
             <span>Overview</span>
+          </TabsTrigger>
+          <TabsTrigger value="distribution" className="flex items-center space-x-2">
+            <Sigma className="h-4 w-4" />
+            <span>Distribution</span>
+          </TabsTrigger>
+          <TabsTrigger value="correlation" className="flex items-center space-x-2">
+            <Grid3X3 className="h-4 w-4" />
+            <span>Correlation</span>
           </TabsTrigger>
           <TabsTrigger value="charts" className="flex items-center space-x-2">
             <BarChart3 className="h-4 w-4" />
@@ -254,6 +267,158 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
                 <h3 className="text-lg font-semibold text-foreground mb-2">Select a Column to Start</h3>
                 <p className="text-muted-foreground">
                   Choose a numeric column above to create your first chart
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* Distribution Analysis Tab */}
+        <TabsContent value="distribution" className="space-y-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold mb-2">Statistical Distribution Analysis</h3>
+            <p className="text-sm text-muted-foreground">
+              Analyze the distribution patterns of your numeric data columns
+            </p>
+          </div>
+          
+          {/* Distribution Type Selector */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Distribution Visualization</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {numericColumns.map((column) => (
+                  <DistributionChart
+                    key={column}
+                    data={data}
+                    column={column}
+                    type="histogram"
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Density Plots */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Density Analysis</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {numericColumns.map((column) => (
+                  <DistributionChart
+                    key={column}
+                    data={data}
+                    column={column}
+                    type="density"
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Scatter Plots */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Value Distribution Scatter</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {numericColumns.slice(0, 6).map((column) => (
+                  <DistributionChart
+                    key={column}
+                    data={data}
+                    column={column}
+                    type="scatter"
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Correlation Analysis Tab */}
+        <TabsContent value="correlation" className="space-y-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold mb-2">Correlation Analysis</h3>
+            <p className="text-sm text-muted-foreground">
+              Discover relationships between different numeric columns in your dataset
+            </p>
+          </div>
+          
+          {numericColumns.length >= 2 ? (
+            <>
+              <CorrelationMatrix data={data} columns={numericColumns} />
+              
+              {/* Top Correlations */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Strongest Correlations</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {(() => {
+                      const correlations: Array<{ col1: string; col2: string; value: number }> = [];
+                      numericColumns.forEach((col1, i) => {
+                        numericColumns.slice(i + 1).forEach(col2 => {
+                          const values1 = data.map(row => Number(row[col1])).filter(v => !isNaN(v));
+                          const values2 = data.map(row => Number(row[col2])).filter(v => !isNaN(v));
+                          
+                          if (values1.length && values2.length) {
+                            const mean1 = values1.reduce((a, b) => a + b, 0) / values1.length;
+                            const mean2 = values2.reduce((a, b) => a + b, 0) / values2.length;
+                            
+                            let numerator = 0;
+                            let denominator1 = 0;
+                            let denominator2 = 0;
+                            
+                            for (let i = 0; i < Math.min(values1.length, values2.length); i++) {
+                              const diff1 = values1[i] - mean1;
+                              const diff2 = values2[i] - mean2;
+                              numerator += diff1 * diff2;
+                              denominator1 += diff1 * diff1;
+                              denominator2 += diff2 * diff2;
+                            }
+                            
+                            const correlation = denominator1 * denominator2 === 0 
+                              ? 0 
+                              : numerator / Math.sqrt(denominator1 * denominator2);
+                            
+                            correlations.push({ col1, col2, value: correlation });
+                          }
+                        });
+                      });
+                      
+                      return correlations
+                        .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
+                        .slice(0, 5)
+                        .map(({ col1, col2, value }) => (
+                          <div key={`${col1}-${col2}`} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium">{col1}</span>
+                              <span className="text-muted-foreground">↔</span>
+                              <span className="text-sm font-medium">{col2}</span>
+                            </div>
+                            <Badge variant={Math.abs(value) > 0.7 ? "destructive" : Math.abs(value) > 0.5 ? "secondary" : "outline"}>
+                              {value.toFixed(3)}
+                            </Badge>
+                          </div>
+                        ));
+                    })()}
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          ) : (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <Grid3X3 className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">Insufficient Data</h3>
+                <p className="text-muted-foreground">
+                  At least 2 numeric columns are required for correlation analysis
                 </p>
               </CardContent>
             </Card>
