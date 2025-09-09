@@ -7,6 +7,8 @@ import { AIInsights } from "@/components/AIInsights";
 import { AdvancedAnalytics } from "@/components/AdvancedAnalytics";
 import { VirtualizedTable } from "@/components/VirtualizedTable";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
+import { DistributionChart } from "@/components/DistributionChart";
+import { CorrelationMatrix } from "@/components/CorrelationMatrix";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -415,6 +417,27 @@ const SharedDashboard = () => {
           {/* Advanced Analytics Tab */}
           <TabsContent value="advanced" className="space-y-6 mt-6">
             <AdvancedAnalytics data={sharedData.data} numericColumns={numericColumns} />
+            
+            {/* Distribution Charts */}
+            {numericColumns.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {numericColumns.slice(0, 4).map((column) => (
+                  <DistributionChart
+                    key={column}
+                    data={sharedData.data}
+                    column={column}
+                  />
+                ))}
+              </div>
+            )}
+            
+            {/* Correlation Matrix */}
+            {numericColumns.length >= 2 && (
+              <CorrelationMatrix 
+                data={sharedData.data} 
+                columns={numericColumns}
+              />
+            )}
           </TabsContent>
 
           {/* Excel Analysis Tab */}
