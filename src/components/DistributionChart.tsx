@@ -13,7 +13,13 @@ interface DistributionChartProps {
 
 export const DistributionChart = ({ data, column, type = 'histogram', bins = 20 }: DistributionChartProps) => {
   const chartData = useMemo(() => {
-    const values = data.map(row => Number(row[column])).filter(v => !isNaN(v));
+    // For large datasets, sample the data for better performance
+    const sampleSize = 10000;
+    const sampledData = data.length > sampleSize 
+      ? data.filter((_, i) => i % Math.floor(data.length / sampleSize) === 0).slice(0, sampleSize)
+      : data;
+    
+    const values = sampledData.map(row => Number(row[column])).filter(v => !isNaN(v));
     
     if (values.length === 0) return { data: [], stats: {} };
     

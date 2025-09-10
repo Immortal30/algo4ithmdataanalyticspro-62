@@ -23,6 +23,7 @@ import { KPICard } from "./KPICard";
 import { VirtualizedTable } from "./VirtualizedTable";
 import { DistributionChart } from "./DistributionChart";
 import { CorrelationMatrix } from "./CorrelationMatrix";
+import { AdvancedCharts } from "./AdvancedCharts";
 
 interface DataDashboardProps {
   data: any[];
@@ -126,10 +127,14 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
 
       {/* Main Dashboard Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 mb-6">
+        <TabsList className="grid w-full grid-cols-6 mb-6">
           <TabsTrigger value="overview" className="flex items-center space-x-2">
             <TrendingUp className="h-4 w-4" />
             <span>Overview</span>
+          </TabsTrigger>
+          <TabsTrigger value="advanced" className="flex items-center space-x-2">
+            <PieChart className="h-4 w-4" />
+            <span>Advanced</span>
           </TabsTrigger>
           <TabsTrigger value="distribution" className="flex items-center space-x-2">
             <Sigma className="h-4 w-4" />
@@ -184,6 +189,22 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
               />
             ))}
           </div>
+        </TabsContent>
+
+        {/* Advanced Charts Tab */}
+        <TabsContent value="advanced" className="space-y-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold mb-2">Advanced Visualizations</h3>
+            <p className="text-sm text-muted-foreground">
+              Explore your data with pie charts, donut charts, radar plots, treemaps, and more
+            </p>
+          </div>
+          
+          <AdvancedCharts 
+            data={data} 
+            columns={Object.keys(data[0] || {})} 
+            selectedColumn={selectedColumn || numericColumns[0]}
+          />
         </TabsContent>
 
         {/* Interactive Charts Tab */}

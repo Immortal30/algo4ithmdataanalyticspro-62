@@ -9,6 +9,7 @@ import { VirtualizedTable } from "@/components/VirtualizedTable";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { DistributionChart } from "@/components/DistributionChart";
 import { CorrelationMatrix } from "@/components/CorrelationMatrix";
+import { AdvancedCharts } from "@/components/AdvancedCharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -417,6 +418,13 @@ const SharedDashboard = () => {
           {/* Advanced Analytics Tab */}
           <TabsContent value="advanced" className="space-y-6 mt-6">
             <AdvancedAnalytics data={sharedData.data} numericColumns={numericColumns} />
+            
+            {/* Advanced Charts - Pie, Donut, Radar, etc */}
+            <AdvancedCharts 
+              data={sharedData.data} 
+              columns={Object.keys(sharedData.data[0] || {})} 
+              selectedColumn={numericColumns[0]}
+            />
             
             {/* Distribution Charts */}
             {numericColumns.length > 0 && (
