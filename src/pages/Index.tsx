@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import * as XLSX from 'xlsx';
 import { FileUpload } from "@/components/FileUpload";
 import { ChartGenerator } from "@/components/ChartGenerator";
@@ -358,53 +358,55 @@ const Index = () => {
       {/* Header */}
       <div className="border-b border-glass-border bg-gradient-to-r from-glass-bg to-transparent backdrop-blur-sm">
         <div className="container mx-auto px-6 py-8">
-          <div className="flex items-center space-x-4">
-            {/* Refined animated logo */}
-            <div className="relative group cursor-pointer">
-              {/* Subtle glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-dashboard-primary/30 to-dashboard-accent/30 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {/* Refined animated logo */}
+              <Link to="/" className="relative group cursor-pointer">
+                {/* Subtle glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-dashboard-primary/30 to-dashboard-accent/30 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Main logo container */}
+                <div className="relative p-3 rounded-xl bg-gradient-to-br from-card to-card/80 border border-dashboard-primary/20 group-hover:border-dashboard-primary/40 transition-all duration-300 group-hover:scale-105">
+                  <div className="flex items-center space-x-3">
+                    {/* Animated chart icon */}
+                    <div className="relative">
+                      <BarChart3 className="h-7 w-7 text-dashboard-primary transition-transform duration-300 group-hover:scale-110" />
+                      {/* Subtle pulse animation */}
+                      <div className="absolute inset-0 bg-dashboard-primary/20 rounded-lg animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    {/* Animated separator line */}
+                    <div className="w-px h-8 bg-gradient-to-b from-transparent via-dashboard-primary/50 to-transparent group-hover:via-dashboard-primary transition-all duration-300"></div>
+                    
+                    {/* Simple animated dots */}
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-dashboard-primary rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-dashboard-accent rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-dashboard-secondary rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
               
-              {/* Main logo container */}
-              <div className="relative p-3 rounded-xl bg-gradient-to-br from-card to-card/80 border border-dashboard-primary/20 group-hover:border-dashboard-primary/40 transition-all duration-300 group-hover:scale-105">
-                <div className="flex items-center space-x-3">
-                  {/* Animated chart icon */}
+              {/* Redesigned brand text */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
                   <div className="relative">
-                    <BarChart3 className="h-7 w-7 text-dashboard-primary transition-transform duration-300 group-hover:scale-110" />
-                    {/* Subtle pulse animation */}
-                    <div className="absolute inset-0 bg-dashboard-primary/20 rounded-lg animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  
-                  {/* Animated separator line */}
-                  <div className="w-px h-8 bg-gradient-to-b from-transparent via-dashboard-primary/50 to-transparent group-hover:via-dashboard-primary transition-all duration-300"></div>
-                  
-                  {/* Simple animated dots */}
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-dashboard-primary rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-dashboard-accent rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-dashboard-secondary rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    <h1 className="text-4xl font-bold tracking-tight">
+                      <span className="bg-gradient-to-r from-dashboard-primary via-dashboard-accent to-dashboard-secondary bg-clip-text text-transparent">
+                        Analytics
+                      </span>
+                    </h1>
+                    {/* PRO badge integrated into the text */}
+                    <div className="absolute -top-1 -right-8 px-2 py-0.5 bg-gradient-to-r from-dashboard-primary to-dashboard-accent text-white text-xs font-bold rounded transform rotate-12 shadow-lg">
+                      PRO
+                    </div>
                   </div>
                 </div>
+                <p className="text-muted-foreground text-lg font-medium">
+                  Transform your Excel data into beautiful, interactive dashboards
+                </p>
               </div>
-            </div>
-            
-            {/* Redesigned brand text */}
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <h1 className="text-4xl font-bold tracking-tight">
-                    <span className="bg-gradient-to-r from-dashboard-primary via-dashboard-accent to-dashboard-secondary bg-clip-text text-transparent">
-                      Analytics
-                    </span>
-                  </h1>
-                  {/* PRO badge integrated into the text */}
-                  <div className="absolute -top-1 -right-8 px-2 py-0.5 bg-gradient-to-r from-dashboard-primary to-dashboard-accent text-white text-xs font-bold rounded transform rotate-12 shadow-lg">
-                    PRO
-                  </div>
-                </div>
-              </div>
-              <p className="text-muted-foreground text-lg font-medium">
-                Transform your Excel data into beautiful, interactive dashboards
-              </p>
             </div>
           </div>
         </div>
