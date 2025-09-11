@@ -16,7 +16,8 @@ import {
   Download,
   RefreshCw,
   Sigma,
-  Grid3X3
+  Grid3X3,
+  Sparkles
 } from "lucide-react";
 import { ChartGenerator } from "./ChartGenerator";
 import { KPICard } from "./KPICard";
@@ -24,6 +25,7 @@ import { VirtualizedTable } from "./VirtualizedTable";
 import { DistributionChart } from "./DistributionChart";
 import { CorrelationMatrix } from "./CorrelationMatrix";
 import { AdvancedCharts } from "./AdvancedCharts";
+import { AIChartGenerator } from "./AIChartGenerator";
 
 interface DataDashboardProps {
   data: any[];
@@ -127,7 +129,11 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
 
       {/* Main Dashboard Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-6 mb-6">
+        <TabsList className="grid w-full grid-cols-7 mb-6">
+          <TabsTrigger value="ai" className="flex items-center space-x-2">
+            <Sparkles className="h-4 w-4" />
+            <span>AI Charts</span>
+          </TabsTrigger>
           <TabsTrigger value="overview" className="flex items-center space-x-2">
             <TrendingUp className="h-4 w-4" />
             <span>Overview</span>
@@ -153,6 +159,11 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
             <span>Data View</span>
           </TabsTrigger>
         </TabsList>
+
+        {/* AI Chart Generator Tab */}
+        <TabsContent value="ai" className="space-y-6">
+          <AIChartGenerator data={data} columns={Object.keys(data[0] || {})} />
+        </TabsContent>
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">

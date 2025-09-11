@@ -10,12 +10,13 @@ import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { DistributionChart } from "@/components/DistributionChart";
 import { CorrelationMatrix } from "@/components/CorrelationMatrix";
 import { AdvancedCharts } from "@/components/AdvancedCharts";
+import { AIChartGenerator } from "@/components/AIChartGenerator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Database, Activity, Brain, Calculator, AlertCircle, ExternalLink, Share2, Calendar, User, Zap } from "lucide-react";
+import { BarChart3, Database, Activity, Brain, Calculator, AlertCircle, ExternalLink, Share2, Calendar, User, Zap, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LZString from 'lz-string';
 
@@ -308,7 +309,11 @@ const SharedDashboard = () => {
 
         {/* Tabbed Interface */}
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
+          <TabsList className="grid w-full grid-cols-6 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
+            <TabsTrigger value="ai" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
+              <Sparkles className="h-4 w-4 mr-2" />
+              AI Charts
+            </TabsTrigger>
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
               <BarChart3 className="h-4 w-4 mr-2" />
               Dashboard
