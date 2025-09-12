@@ -108,10 +108,6 @@ const Welcome = () => {
                   <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-dashboard-primary/30 hover:bg-dashboard-primary/10">
-                <Activity className="mr-2 h-5 w-5" />
-                View Live Demo
-              </Button>
             </div>
 
             {/* Trust Badges */}
