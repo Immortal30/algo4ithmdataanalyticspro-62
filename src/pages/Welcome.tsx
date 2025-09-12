@@ -68,33 +68,6 @@ const Welcome = () => {
     }
   ];
 
-  const stats = [
-    { value: "10M+", label: "Data Points Processed" },
-    { value: "50K+", label: "Active Users" },
-    { value: "99.9%", label: "Uptime" },
-    { value: "4.9★", label: "User Rating" }
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Data Analyst, TechCorp",
-      content: "Analytics Pro transformed how we visualize data. The AI features are game-changing!",
-      rating: 5
-    },
-    {
-      name: "Michael Chen",
-      role: "CFO, FinanceHub",
-      content: "The predictive analytics saved us millions by identifying trends we never saw before.",
-      rating: 5
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Product Manager, StartupX",
-      content: "Incredibly intuitive! Even non-technical team members create beautiful dashboards.",
-      rating: 5
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-muted/20">
@@ -180,21 +153,6 @@ const Welcome = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 border-y border-glass-border bg-glass-bg/30 backdrop-blur-sm">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-dashboard-primary to-dashboard-accent bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <div className="text-muted-foreground mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Features Grid */}
       <section className="py-20">
@@ -230,97 +188,7 @@ const Welcome = () => {
         </div>
       </section>
 
-      {/* Workflow Section */}
-      <section className="py-20 bg-glass-bg/30 backdrop-blur-sm">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              How It Works
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Three simple steps to powerful insights
-            </p>
-          </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-8">
-              {[
-                { step: 1, title: "Upload Your Data", desc: "Import Excel, CSV, or connect to your database", icon: FileUp },
-                { step: 2, title: "AI Analysis", desc: "Our AI instantly analyzes patterns and creates visualizations", icon: Brain },
-                { step: 3, title: "Share Insights", desc: "Export reports or share interactive dashboards", icon: Share2 }
-              ].map((item, index) => (
-                <div key={index} className="flex items-center gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-dashboard-primary to-dashboard-accent flex items-center justify-center text-white font-bold text-xl">
-                      {item.step}
-                    </div>
-                  </div>
-                  <Card className="flex-1 bg-card/50 border-dashboard-primary/10">
-                    <CardContent className="p-6 flex items-center gap-4">
-                      <item.icon className="h-8 w-8 text-dashboard-primary flex-shrink-0" />
-                      <div>
-                        <h3 className="font-semibold text-lg">{item.title}</h3>
-                        <p className="text-muted-foreground">{item.desc}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  {index < 2 && (
-                    <ArrowRight className="h-6 w-6 text-dashboard-primary/50 hidden md:block" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Loved by Data Teams Worldwide
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-card/50 border-dashboard-primary/10">
-                <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-500 text-yellow-500" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">"{testimonial.content}"</p>
-                  <div>
-                    <div className="font-semibold">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-dashboard-primary/10 to-dashboard-accent/10 border-t border-dashboard-primary/20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Transform Your Data?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of teams using Analytics Pro to make data-driven decisions
-          </p>
-          <Link to="/dashboard">
-            <Button size="lg" className="bg-gradient-to-r from-dashboard-primary to-dashboard-accent hover:opacity-90 text-white px-8">
-              Get Started Free
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-      </section>
     </div>
   );
 };
