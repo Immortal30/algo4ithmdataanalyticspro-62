@@ -12,6 +12,7 @@ import { DashboardExport } from "@/components/DashboardExport";
 import { ShareDashboard } from "@/components/ShareDashboard";
 import { DataDashboard } from "@/components/DataDashboard";
 import { VirtualizedTable } from "@/components/VirtualizedTable";
+import { Spreadsheet } from "@/components/Spreadsheet";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -508,8 +509,12 @@ const Index = () => {
             </Card>
 
             {/* Tabbed Interface */}
-            <Tabs defaultValue="dashboard" className="w-full">
-              <TabsList className="grid w-full grid-cols-7 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
+            <Tabs defaultValue="spreadsheet" className="w-full">
+              <TabsList className="grid w-full grid-cols-8 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
+                <TabsTrigger value="spreadsheet" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
+                  <Database className="h-4 w-4 mr-2" />
+                  Spreadsheet
+                </TabsTrigger>
                 <TabsTrigger value="dashboard" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard
@@ -539,6 +544,20 @@ const Index = () => {
                   Export
                 </TabsTrigger>
               </TabsList>
+
+              {/* Spreadsheet Tab */}
+              <TabsContent value="spreadsheet" className="space-y-6 mt-6">
+                <Spreadsheet 
+                  onDataChange={(newData) => {
+                    setData(newData);
+                    toast({
+                      title: "Data Updated",
+                      description: `Spreadsheet data synced with dashboard (${newData.length} rows)`
+                    });
+                  }}
+                  initialData={data}
+                />
+              </TabsContent>
 
               {/* Dashboard Tab */}
               <TabsContent value="dashboard" className="space-y-6 mt-6">
