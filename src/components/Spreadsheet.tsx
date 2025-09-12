@@ -47,13 +47,21 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ onDataChange, initialD
   const [cells, setCells] = useState<Record<string, Cell>>({});
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [selectedRange, setSelectedRange] = useState<string[]>([]);
-  const [rows, setRows] = useState(50);
-  const [cols, setCols] = useState(26);
+  const [rows, setRows] = useState(100000); // 100k rows
+  const [cols, setCols] = useState(100000); // 100k columns
+  const [visibleRows, setVisibleRows] = useState({ start: 0, end: 50 });
+  const [visibleCols, setVisibleCols] = useState({ start: 0, end: 26 });
+  const [scrollTop, setScrollTop] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const CELL_HEIGHT = 32;
+  const CELL_WIDTH = 100;
   const [history, setHistory] = useState<Record<string, Cell>[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [editingCell, setEditingCell] = useState<string | null>(null);
   const [formulaBar, setFormulaBar] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
   // Initialize with data if provided
   useEffect(() => {
@@ -320,12 +328,32 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ onDataChange, initialD
   };
 
   const addRow = () => {
-    setRows(rows + 1);
+    setRows(rows + 1000); // Add 1000 rows at a time
   };
 
   const addColumn = () => {
-    setCols(cols + 1);
+    setCols(cols + 100); // Add 100 columns at a time
   };
+
+  // Handle virtualized scrolling
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const scrollTop = target.scrollTop;
+    const scrollLeft = target.scrollLeft;
+    
+    // Calculate visible rows
+    const startRow = Math.floor(scrollTop / CELL_HEIGHT);
+    const endRow = Math.min(startRow + Math.ceil(target.clientHeight / CELL_HEIGHT) + 1, rows);
+    
+    // Calculate visible columns
+    const startCol = Math.floor(scrollLeft / CELL_WIDTH);
+    const endCol = Math.min(startCol + Math.ceil(target.clientWidth / CELL_WIDTH) + 1, cols);
+    
+    setVisibleRows({ start: startRow, end: endRow });
+    setVisibleCols({ start: startCol, end: endCol });
+    setScrollTop(scrollTop);
+    setScrollLeft(scrollLeft);
+  }, [rows, cols]);
 
   return (
     <Card className="p-4 bg-black/90 border-gray-800">
@@ -421,38 +449,74 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ onDataChange, initialD
         />
       </div>
 
-      {/* Spreadsheet Grid */}
-      <div className="overflow-auto max-h-[600px] border border-gray-700 rounded bg-gray-950">
-        <table className="w-full border-collapse">
-          <thead className="sticky top-0 z-10">
-            <tr>
-              <th className="border border-gray-700 bg-gray-900 text-gray-400 p-2 min-w-[40px] w-[40px]"></th>
-              {Array.from({ length: cols }, (_, i) => (
-                <th key={i} className="border border-gray-700 bg-gray-900 text-gray-300 p-2 min-w-[100px] font-medium">
-                  {getColumnLabel(i)}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from({ length: rows }, (_, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="border border-gray-700 bg-gray-900 text-gray-400 p-2 text-center font-medium sticky left-0">
+      {/* Virtualized Spreadsheet Grid */}
+      <div 
+        ref={gridRef}
+        className="overflow-auto max-h-[600px] border border-gray-700 rounded bg-gray-950 relative"
+        onScroll={handleScroll}
+      >
+        {/* Virtual spacer to maintain scroll area */}
+        <div style={{ width: cols * CELL_WIDTH + 50, height: rows * CELL_HEIGHT + 40, position: 'relative' }}>
+          {/* Header */}
+          <div className="sticky top-0 z-20 flex" style={{ transform: `translateX(-${scrollLeft}px)` }}>
+            <div className="border border-gray-700 bg-gray-900 text-gray-400 p-2 w-[50px] sticky left-0 z-30" style={{ transform: `translateX(${scrollLeft}px)` }}></div>
+            {Array.from({ length: visibleCols.end - visibleCols.start }, (_, i) => {
+              const colIndex = visibleCols.start + i;
+              return (
+                <div 
+                  key={colIndex} 
+                  className="border border-gray-700 bg-gray-900 text-gray-300 p-2 text-center font-medium"
+                  style={{ 
+                    width: CELL_WIDTH, 
+                    position: 'absolute',
+                    left: colIndex * CELL_WIDTH + 50
+                  }}
+                >
+                  {getColumnLabel(colIndex)}
+                </div>
+              );
+            })}
+          </div>
+          
+          {/* Virtual rows */}
+          {Array.from({ length: visibleRows.end - visibleRows.start }, (_, i) => {
+            const rowIndex = visibleRows.start + i;
+            return (
+              <div 
+                key={rowIndex} 
+                className="flex" 
+                style={{ 
+                  position: 'absolute',
+                  top: rowIndex * CELL_HEIGHT + 40,
+                  left: 0,
+                  height: CELL_HEIGHT
+                }}
+              >
+                {/* Row number */}
+                <div className="border border-gray-700 bg-gray-900 text-gray-400 p-2 text-center font-medium sticky left-0 z-10" style={{ width: 50 }}>
                   {rowIndex + 1}
-                </td>
-                {Array.from({ length: cols }, (_, colIndex) => {
+                </div>
+                
+                {/* Virtual cells */}
+                {Array.from({ length: visibleCols.end - visibleCols.start }, (_, j) => {
+                  const colIndex = visibleCols.start + j;
                   const key = getCellKey(rowIndex, colIndex);
                   const cell = cells[key];
                   const isSelected = selectedCell === key;
                   
                   return (
-                    <td
+                    <div
                       key={colIndex}
                       className={cn(
-                        "border border-gray-700 p-0 min-w-[100px]",
+                        "border border-gray-700 p-0",
                         isSelected ? "ring-2 ring-primary ring-inset" : "",
                         "bg-gray-950 hover:bg-gray-900"
                       )}
+                      style={{ 
+                        width: CELL_WIDTH,
+                        position: 'absolute',
+                        left: colIndex * CELL_WIDTH + 50
+                      }}
                       onClick={() => {
                         setSelectedCell(key);
                         setFormulaBar(cell?.formula || cell?.value || '');
@@ -495,25 +559,26 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ onDataChange, initialD
                         )}
                         style={{
                           backgroundColor: cell?.style?.backgroundColor,
-                          color: cell?.style?.color
+                          color: cell?.style?.color,
+                          height: CELL_HEIGHT
                         }}
                       />
-                    </td>
+                    </div>
                   );
                 })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Status Bar */}
       <div className="mt-2 text-xs text-gray-500 flex justify-between">
         <span>
-          {rows} rows × {cols} columns
+          {rows.toLocaleString()} rows × {cols.toLocaleString()} columns | Visible: {visibleRows.end - visibleRows.start} × {visibleCols.end - visibleCols.start}
         </span>
         <span>
-          {Object.keys(cells).length} cells with data
+          {Object.keys(cells).length} cells with data | Position: Row {visibleRows.start + 1}-{visibleRows.end} Col {getColumnLabel(visibleCols.start)}-{getColumnLabel(visibleCols.end - 1)}
         </span>
       </div>
     </Card>
