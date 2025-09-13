@@ -309,11 +309,7 @@ const SharedDashboard = () => {
 
         {/* Tabbed Interface */}
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
-            <TabsTrigger value="ai" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
-              <Sparkles className="h-4 w-4 mr-2" />
-              AI Charts
-            </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-5 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
               <BarChart3 className="h-4 w-4 mr-2" />
               Dashboard
