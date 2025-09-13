@@ -7,6 +7,7 @@ import { KPICard } from "@/components/KPICard";
 import { ExcelAnalysis } from "@/components/ExcelAnalysis";
 import { AIInsights } from "@/components/AIInsights";
 import { AdvancedAnalytics } from "@/components/AdvancedAnalytics";
+import { AdvancedCharts } from "@/components/AdvancedCharts";
 import { DataMindPro } from "@/components/DataMindPro";
 import { DashboardExport } from "@/components/DashboardExport";
 import { ShareDashboard } from "@/components/ShareDashboard";
@@ -743,6 +744,13 @@ const Index = () => {
               {/* Advanced Analytics Tab */}
               <TabsContent value="advanced" className="mt-6">
                 <AdvancedAnalytics data={data} numericColumns={numericColumns} />
+                
+                {/* Advanced Charts - Pie, Donut, Radar, Treemap, Funnel, Time Series */}
+                <AdvancedCharts 
+                  data={data} 
+                  columns={Object.keys(data[0] || {})} 
+                  selectedColumn={numericColumns[0]}
+                />
               </TabsContent>
 
               {/* Analysis Tab */}
