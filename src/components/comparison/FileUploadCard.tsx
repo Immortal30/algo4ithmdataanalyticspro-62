@@ -18,14 +18,22 @@ export const FileUploadCard = ({
   isLoading, 
   onFileUpload 
 }: FileUploadCardProps) => {
-  const cardColor = fileNumber === 1 ? 'primary' : 'accent';
+  const isFile1 = fileNumber === 1;
   
   return (
-    <Card className={`border-dashboard-${cardColor}/30 bg-gradient-to-br from-dashboard-${cardColor}/5 to-dashboard-${cardColor}/10 hover:shadow-elegant transition-all duration-300`}>
-      <CardHeader className={`border-b border-dashboard-${cardColor}/20`}>
+    <Card className={`${
+      isFile1 
+        ? 'border-dashboard-primary/30 bg-gradient-to-br from-dashboard-primary/5 to-dashboard-primary/10' 
+        : 'border-dashboard-accent/30 bg-gradient-to-br from-dashboard-accent/5 to-dashboard-accent/10'
+    } hover:shadow-elegant transition-all duration-300`}>
+      <CardHeader className={`border-b ${
+        isFile1 ? 'border-dashboard-primary/20' : 'border-dashboard-accent/20'
+      }`}>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <FileSpreadsheet className={`h-5 w-5 text-dashboard-${cardColor}`} />
+            <FileSpreadsheet className={`h-5 w-5 ${
+              isFile1 ? 'text-dashboard-primary' : 'text-dashboard-accent'
+            }`} />
             <span>File {fileNumber}</span>
           </div>
           {fileName && (
