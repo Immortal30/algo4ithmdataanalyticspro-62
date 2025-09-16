@@ -1,14 +1,16 @@
 import { useState, useMemo } from "react";
 import * as XLSX from 'xlsx';
-import { FileUpload } from "@/components/FileUpload";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VirtualizedTable } from "@/components/VirtualizedTable";
 import { ChartGenerator } from "@/components/ChartGenerator";
-import { GitCompare, BarChart3, Table, TrendingUp, AlertTriangle } from "lucide-react";
+import { GitCompare, BarChart3, Table2, FileX, RefreshCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ComparisonMetrics } from "./comparison/ComparisonMetrics";
+import { NumericComparisons } from "./comparison/NumericComparisons";
+import { ColumnDetails } from "./comparison/ColumnDetails";
+import { FileUploadCard } from "./comparison/FileUploadCard";
 
 interface DataComparisonProps {}
 
@@ -134,21 +136,32 @@ export const DataComparison = ({}: DataComparisonProps) => {
     setFile2Data([]);
     setFile1Name("");
     setFile2Name("");
+    toast({
+      title: "Files cleared",
+      description: "All uploaded files have been removed",
+    });
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <GitCompare className="h-8 w-8 text-dashboard-primary" />
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-dashboard-primary/20 to-dashboard-primary/10 flex items-center justify-center animate-pulse">
+            <GitCompare className="h-7 w-7 text-dashboard-primary" />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold gradient-text">Data Comparison</h1>
-            <p className="text-muted-foreground">Upload two files to compare their data side by side</p>
+            <h1 className="text-3xl font-bold gradient-text">Data Comparison Tool</h1>
+            <p className="text-muted-foreground mt-1">Analyze differences and patterns between two datasets</p>
           </div>
         </div>
         {(file1Data.length > 0 || file2Data.length > 0) && (
-          <Button onClick={clearFiles} variant="outline">
+          <Button 
+            onClick={clearFiles} 
+            variant="outline"
+            className="group hover:border-dashboard-destructive/50 transition-all"
+          >
+            <RefreshCcw className="h-4 w-4 mr-2 group-hover:rotate-180 transition-transform duration-500" />
             Clear All Files
           </Button>
         )}
@@ -156,247 +169,158 @@ export const DataComparison = ({}: DataComparisonProps) => {
 
       {/* File Upload Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <span>File 1</span>
-              {file1Name && <Badge variant="secondary">{file1Name}</Badge>}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FileUpload onFileUpload={handleFile1Upload} isLoading={isLoading1} />
-            {file1Data.length > 0 && (
-              <div className="mt-4 p-4 bg-dashboard-success/10 rounded-lg border border-dashboard-success/30">
-                <p className="text-sm text-dashboard-success">
-                  ✓ {file1Data.length} records loaded
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <span>File 2</span>
-              {file2Name && <Badge variant="secondary">{file2Name}</Badge>}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FileUpload onFileUpload={handleFile2Upload} isLoading={isLoading2} />
-            {file2Data.length > 0 && (
-              <div className="mt-4 p-4 bg-dashboard-success/10 rounded-lg border border-dashboard-success/30">
-                <p className="text-sm text-dashboard-success">
-                  ✓ {file2Data.length} records loaded
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <FileUploadCard
+          fileNumber={1}
+          fileName={file1Name}
+          dataLength={file1Data.length}
+          isLoading={isLoading1}
+          onFileUpload={handleFile1Upload}
+        />
+        <FileUploadCard
+          fileNumber={2}
+          fileName={file2Name}
+          dataLength={file2Data.length}
+          isLoading={isLoading2}
+          onFileUpload={handleFile2Upload}
+        />
       </div>
 
       {/* Comparison Results */}
       {comparisonMetrics && (
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="data">Data View</TabsTrigger>
-            <TabsTrigger value="charts">Charts</TabsTrigger>
-            <TabsTrigger value="differences">Differences</TabsTrigger>
+        <Tabs defaultValue="overview" className="w-full animate-fade-in">
+          <TabsList className="grid w-full grid-cols-4 bg-dashboard-card/50 border border-dashboard-border">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-dashboard-primary/10">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="data" className="data-[state=active]:bg-dashboard-primary/10">
+              Data View
+            </TabsTrigger>
+            <TabsTrigger value="charts" className="data-[state=active]:bg-dashboard-primary/10">
+              Visualizations
+            </TabsTrigger>
+            <TabsTrigger value="differences" className="data-[state=active]:bg-dashboard-primary/10">
+              Column Analysis
+            </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <Table className="h-4 w-4 text-dashboard-primary" />
-                    <div>
-                      <p className="text-2xl font-bold">{comparisonMetrics.file1Records}</p>
-                      <p className="text-sm text-muted-foreground">File 1 Records</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <Table className="h-4 w-4 text-dashboard-accent" />
-                    <div>
-                      <p className="text-2xl font-bold">{comparisonMetrics.file2Records}</p>
-                      <p className="text-sm text-muted-foreground">File 2 Records</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <BarChart3 className="h-4 w-4 text-dashboard-success" />
-                    <div>
-                      <p className="text-2xl font-bold">{comparisonMetrics.commonColumns}</p>
-                      <p className="text-sm text-muted-foreground">Common Columns</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <AlertTriangle className="h-4 w-4 text-dashboard-warning" />
-                    <div>
-                      <p className="text-2xl font-bold">
-                        {comparisonMetrics.uniqueToFile1 + comparisonMetrics.uniqueToFile2}
-                      </p>
-                      <p className="text-sm text-muted-foreground">Unique Columns</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Numeric Comparisons */}
-            {comparisonMetrics.numericComparisons.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Numeric Column Comparisons</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {comparisonMetrics.numericComparisons.map((comparison) => (
-                      <div key={comparison.column} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                        <div>
-                          <h4 className="font-semibold">{comparison.column}</h4>
-                          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                            <span>File 1 Avg: {comparison.file1Avg}</span>
-                            <span>File 2 Avg: {comparison.file2Avg}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <TrendingUp className={`h-4 w-4 ${comparison.isIncrease ? 'text-dashboard-success' : 'text-dashboard-destructive'} ${comparison.isIncrease ? '' : 'transform rotate-180'}`} />
-                          <span className={`font-semibold ${comparison.isIncrease ? 'text-dashboard-success' : 'text-dashboard-destructive'}`}>
-                            {comparison.isIncrease ? '+' : ''}{comparison.difference}%
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+          <TabsContent value="overview" className="space-y-6 animate-fade-in">
+            <ComparisonMetrics 
+              metrics={{
+                file1Records: comparisonMetrics.file1Records,
+                file2Records: comparisonMetrics.file2Records,
+                commonColumns: comparisonMetrics.commonColumns,
+                uniqueToFile1: comparisonMetrics.uniqueToFile1,
+                uniqueToFile2: comparisonMetrics.uniqueToFile2
+              }}
+            />
+            <NumericComparisons comparisons={comparisonMetrics.numericComparisons} />
           </TabsContent>
 
           {/* Data View Tab */}
-          <TabsContent value="data" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>{file1Name || 'File 1'}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <VirtualizedTable data={file1Data.slice(0, 100)} />
+          <TabsContent value="data" className="space-y-6 animate-fade-in">
+            {file1Data.length === 0 && file2Data.length === 0 ? (
+              <Card className="border-dashboard-border bg-dashboard-card/50">
+                <CardContent className="p-12 text-center">
+                  <FileX className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No data to display. Please upload files first.</p>
                 </CardContent>
               </Card>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {file1Data.length > 0 && (
+                  <Card className="border-dashboard-primary/30 bg-gradient-to-br from-dashboard-card/50 to-dashboard-card">
+                    <CardHeader className="border-b border-dashboard-border">
+                      <CardTitle className="flex items-center gap-2">
+                        <Table2 className="h-5 w-5 text-dashboard-primary" />
+                        {file1Name || 'File 1 Data'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <VirtualizedTable data={file1Data.slice(0, 100)} />
+                    </CardContent>
+                  </Card>
+                )}
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>{file2Name || 'File 2'}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <VirtualizedTable data={file2Data.slice(0, 100)} />
-                </CardContent>
-              </Card>
-            </div>
+                {file2Data.length > 0 && (
+                  <Card className="border-dashboard-accent/30 bg-gradient-to-br from-dashboard-card/50 to-dashboard-card">
+                    <CardHeader className="border-b border-dashboard-border">
+                      <CardTitle className="flex items-center gap-2">
+                        <Table2 className="h-5 w-5 text-dashboard-accent" />
+                        {file2Name || 'File 2 Data'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <VirtualizedTable data={file2Data.slice(0, 100)} />
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
           </TabsContent>
 
           {/* Charts Tab */}
-          <TabsContent value="charts" className="space-y-6">
-            {comparisonMetrics.numericComparisons.length > 0 && (
+          <TabsContent value="charts" className="space-y-6 animate-fade-in">
+            {comparisonMetrics.numericComparisons.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {comparisonMetrics.numericComparisons.slice(0, 4).map((comparison) => {
+                {comparisonMetrics.numericComparisons.slice(0, 6).map((comparison) => {
                   const chartData = [
-                    { name: file1Name || 'File 1', value: parseFloat(comparison.file1Avg) },
-                    { name: file2Name || 'File 2', value: parseFloat(comparison.file2Avg) }
+                    { 
+                      name: file1Name || 'File 1', 
+                      value: parseFloat(comparison.file1Avg),
+                      fill: 'hsl(var(--dashboard-primary))'
+                    },
+                    { 
+                      name: file2Name || 'File 2', 
+                      value: parseFloat(comparison.file2Avg),
+                      fill: 'hsl(var(--dashboard-accent))'
+                    }
                   ];
                   
                   return (
-                    <Card key={comparison.column}>
-                      <CardHeader>
-                        <CardTitle>{comparison.column} Comparison</CardTitle>
+                    <Card 
+                      key={comparison.column} 
+                      className="border-dashboard-border bg-gradient-to-br from-dashboard-card/50 to-dashboard-card hover:shadow-elegant transition-all duration-300"
+                    >
+                      <CardHeader className="border-b border-dashboard-border">
+                        <CardTitle className="flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-dashboard-primary" />
+                          {comparison.column}
+                        </CardTitle>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-4">
                         <ChartGenerator
                           data={chartData}
-                          title={`${comparison.column} Comparison`}
+                          title=""
                           type="bar"
                           dataKey="value"
                         />
+                        <div className="mt-4 pt-4 border-t border-dashboard-border flex justify-between text-sm">
+                          <span className="text-muted-foreground">Difference:</span>
+                          <span className={`font-semibold ${
+                            comparison.isIncrease ? 'text-dashboard-success' : 'text-dashboard-destructive'
+                          }`}>
+                            {comparison.isIncrease ? '+' : ''}{comparison.difference}%
+                          </span>
+                        </div>
                       </CardContent>
                     </Card>
                   );
                 })}
               </div>
+            ) : (
+              <Card className="border-dashboard-border bg-dashboard-card/50">
+                <CardContent className="p-12 text-center">
+                  <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No numeric columns available for chart visualization</p>
+                </CardContent>
+              </Card>
             )}
           </TabsContent>
 
           {/* Differences Tab */}
-          <TabsContent value="differences" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-dashboard-success">Common Columns</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {comparisonMetrics.columnDetails.common.map((col) => (
-                      <Badge key={col} variant="secondary" className="mr-2 mb-2">
-                        {col}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-dashboard-warning">Unique to File 1</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {comparisonMetrics.columnDetails.uniqueToFile1.map((col) => (
-                      <Badge key={col} variant="destructive" className="mr-2 mb-2">
-                        {col}
-                      </Badge>
-                    ))}
-                    {comparisonMetrics.columnDetails.uniqueToFile1.length === 0 && (
-                      <p className="text-sm text-muted-foreground">No unique columns</p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-dashboard-warning">Unique to File 2</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {comparisonMetrics.columnDetails.uniqueToFile2.map((col) => (
-                      <Badge key={col} variant="destructive" className="mr-2 mb-2">
-                        {col}
-                      </Badge>
-                    ))}
-                    {comparisonMetrics.columnDetails.uniqueToFile2.length === 0 && (
-                      <p className="text-sm text-muted-foreground">No unique columns</p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="differences" className="animate-fade-in">
+            <ColumnDetails columnDetails={comparisonMetrics.columnDetails} />
           </TabsContent>
         </Tabs>
       )}
