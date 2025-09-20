@@ -6,20 +6,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import SharedDashboard from "./pages/SharedDashboard";
 import Welcome from "./pages/Welcome";
+import Splash from "./pages/Splash";
 import NotFound from "./pages/NotFound";
-import SplashScreen from "./components/SplashScreen";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <SplashScreen />
       <Toaster />
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Welcome />} />
+          <Route path="/" element={<Splash />} />
+          <Route path="/home" element={<Welcome />} />
           <Route path="/dashboard" element={<Index />} />
           <Route path="/shared" element={<SharedDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
