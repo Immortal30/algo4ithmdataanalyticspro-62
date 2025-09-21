@@ -52,13 +52,90 @@ const Splash = () => {
               }}
               className="mb-8 flex justify-center"
             >
-              <div className="relative h-32 w-32 rounded-3xl bg-gradient-to-br from-dashboard-primary to-dashboard-accent p-[3px]">
-                <div className="flex h-full w-full items-center justify-center rounded-3xl bg-dashboard-background">
-                  <span className="text-5xl font-bold bg-gradient-to-r from-dashboard-primary to-dashboard-accent bg-clip-text text-transparent">
-                    A4
-                  </span>
+              <div className="relative">
+                {/* Outer glow effect */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-dashboard-primary via-dashboard-accent to-dashboard-primary opacity-30 blur-3xl animate-pulse" />
+                
+                {/* Main logo container */}
+                <div className="relative h-40 w-40 rounded-full bg-gradient-to-br from-dashboard-primary via-dashboard-accent to-dashboard-primary p-[2px]">
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-dashboard-background">
+                    {/* Hexagon shape with A4 */}
+                    <svg className="h-28 w-28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="hsl(var(--dashboard-primary))" />
+                          <stop offset="50%" stopColor="hsl(var(--dashboard-accent))" />
+                          <stop offset="100%" stopColor="hsl(var(--dashboard-primary))" />
+                        </linearGradient>
+                        <filter id="glow">
+                          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                          <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      
+                      {/* Hexagon background */}
+                      <path
+                        d="M60 10 L95 30 L95 70 L60 90 L25 70 L25 30 Z"
+                        fill="url(#logoGradient)"
+                        opacity="0.15"
+                        filter="url(#glow)"
+                      />
+                      
+                      {/* Hexagon border */}
+                      <path
+                        d="M60 10 L95 30 L95 70 L60 90 L25 70 L25 30 Z"
+                        stroke="url(#logoGradient)"
+                        strokeWidth="2"
+                        fill="none"
+                        filter="url(#glow)"
+                      />
+                      
+                      {/* A4 Text */}
+                      <text
+                        x="60"
+                        y="65"
+                        textAnchor="middle"
+                        fontSize="42"
+                        fontWeight="bold"
+                        fill="url(#logoGradient)"
+                        filter="url(#glow)"
+                        fontFamily="system-ui, -apple-system, sans-serif"
+                      >
+                        A4
+                      </text>
+                      
+                      {/* Decorative dots */}
+                      <circle cx="60" cy="20" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                      <circle cx="85" cy="35" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                      <circle cx="85" cy="65" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                      <circle cx="60" cy="80" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                      <circle cx="35" cy="65" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                      <circle cx="35" cy="35" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-dashboard-primary to-dashboard-accent opacity-20 blur-2xl animate-pulse" />
+                
+                {/* Orbiting particles */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0"
+                >
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-dashboard-primary" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-dashboard-accent" />
+                </motion.div>
+                
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0"
+                >
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-dashboard-accent" />
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-dashboard-primary" />
+                </motion.div>
               </div>
             </motion.div>
 
