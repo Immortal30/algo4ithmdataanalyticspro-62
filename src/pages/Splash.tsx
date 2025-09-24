@@ -53,22 +53,21 @@ const Splash = () => {
               className="mb-8 flex justify-center"
             >
               <div className="relative">
-                {/* Outer glow effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-dashboard-primary via-dashboard-accent to-dashboard-primary opacity-30 blur-3xl animate-pulse" />
+                {/* Outer glow effect - enhanced */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-dashboard-primary via-dashboard-accent to-dashboard-primary opacity-50 blur-2xl animate-pulse scale-110" />
                 
-                {/* Main logo container */}
-                <div className="relative h-40 w-40 rounded-full bg-gradient-to-br from-dashboard-primary via-dashboard-accent to-dashboard-primary p-[2px]">
+                {/* Main logo container - bigger and clearer */}
+                <div className="relative h-56 w-56 rounded-full bg-gradient-to-br from-dashboard-primary via-dashboard-accent to-dashboard-primary p-[3px] shadow-2xl">
                   <div className="flex h-full w-full items-center justify-center rounded-full bg-dashboard-background">
-                    {/* Hexagon shape with A4 */}
-                    <svg className="h-28 w-28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Clear and bold A4 logo */}
+                    <svg className="h-44 w-44" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <defs>
                         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                           <stop offset="0%" stopColor="hsl(var(--dashboard-primary))" />
-                          <stop offset="50%" stopColor="hsl(var(--dashboard-accent))" />
-                          <stop offset="100%" stopColor="hsl(var(--dashboard-primary))" />
+                          <stop offset="100%" stopColor="hsl(var(--dashboard-accent))" />
                         </linearGradient>
                         <filter id="glow">
-                          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                          <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                           <feMerge>
                             <feMergeNode in="coloredBlur"/>
                             <feMergeNode in="SourceGraphic"/>
@@ -76,56 +75,56 @@ const Splash = () => {
                         </filter>
                       </defs>
                       
-                      {/* Hexagon background */}
+                      {/* Hexagon background - simplified and clearer */}
                       <path
-                        d="M60 10 L95 30 L95 70 L60 90 L25 70 L25 30 Z"
+                        d="M90 20 L140 50 L140 130 L90 160 L40 130 L40 50 Z"
                         fill="url(#logoGradient)"
-                        opacity="0.15"
-                        filter="url(#glow)"
+                        opacity="0.1"
                       />
                       
-                      {/* Hexagon border */}
+                      {/* Hexagon border - thicker for visibility */}
                       <path
-                        d="M60 10 L95 30 L95 70 L60 90 L25 70 L25 30 Z"
+                        d="M90 20 L140 50 L140 130 L90 160 L40 130 L40 50 Z"
                         stroke="url(#logoGradient)"
-                        strokeWidth="2"
+                        strokeWidth="3"
                         fill="none"
                         filter="url(#glow)"
                       />
                       
-                      {/* A4 Text */}
+                      {/* A4 Text - much larger and bolder */}
                       <text
-                        x="60"
-                        y="65"
+                        x="90"
+                        y="105"
                         textAnchor="middle"
-                        fontSize="42"
-                        fontWeight="bold"
+                        fontSize="72"
+                        fontWeight="900"
                         fill="url(#logoGradient)"
                         filter="url(#glow)"
                         fontFamily="system-ui, -apple-system, sans-serif"
+                        letterSpacing="-2"
                       >
                         A4
                       </text>
                       
-                      {/* Decorative dots */}
-                      <circle cx="60" cy="20" r="2" fill="url(#logoGradient)" opacity="0.8" />
-                      <circle cx="85" cy="35" r="2" fill="url(#logoGradient)" opacity="0.8" />
-                      <circle cx="85" cy="65" r="2" fill="url(#logoGradient)" opacity="0.8" />
-                      <circle cx="60" cy="80" r="2" fill="url(#logoGradient)" opacity="0.8" />
-                      <circle cx="35" cy="65" r="2" fill="url(#logoGradient)" opacity="0.8" />
-                      <circle cx="35" cy="35" r="2" fill="url(#logoGradient)" opacity="0.8" />
+                      {/* Corner accents for emphasis */}
+                      <circle cx="90" cy="30" r="4" fill="url(#logoGradient)" opacity="0.9" />
+                      <circle cx="130" cy="55" r="4" fill="url(#logoGradient)" opacity="0.9" />
+                      <circle cx="130" cy="125" r="4" fill="url(#logoGradient)" opacity="0.9" />
+                      <circle cx="90" cy="150" r="4" fill="url(#logoGradient)" opacity="0.9" />
+                      <circle cx="50" cy="125" r="4" fill="url(#logoGradient)" opacity="0.9" />
+                      <circle cx="50" cy="55" r="4" fill="url(#logoGradient)" opacity="0.9" />
                     </svg>
                   </div>
                 </div>
                 
-                {/* Orbiting particles */}
+                {/* Orbiting particles - larger and more visible */}
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                   className="absolute inset-0"
                 >
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-dashboard-primary" />
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-dashboard-accent" />
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-4 w-4 rounded-full bg-dashboard-primary shadow-lg shadow-dashboard-primary/50" />
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-4 w-4 rounded-full bg-dashboard-accent shadow-lg shadow-dashboard-accent/50" />
                 </motion.div>
                 
                 <motion.div
@@ -133,8 +132,8 @@ const Splash = () => {
                   transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                   className="absolute inset-0"
                 >
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-dashboard-accent" />
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-dashboard-primary" />
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-dashboard-accent shadow-lg shadow-dashboard-accent/50" />
+                  <div className="absolute -right-1 top-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-dashboard-primary shadow-lg shadow-dashboard-primary/50" />
                 </motion.div>
               </div>
             </motion.div>
