@@ -189,15 +189,16 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
           </div>
 
           {/* Quick Chart Previews */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {numericColumns.slice(0, 2).map((column) => (
-              <ChartGenerator
-                key={column}
-                data={getChartData(column)}
-                title={`${column} Analysis`}
-                type="bar"
-                className="h-full"
-              />
+              <div key={column} className="min-h-[500px]">
+                <ChartGenerator
+                  data={getChartData(column)}
+                  title={`${column} Analysis`}
+                  type="bar"
+                  className="h-full"
+                />
+              </div>
             ))}
           </div>
         </TabsContent>

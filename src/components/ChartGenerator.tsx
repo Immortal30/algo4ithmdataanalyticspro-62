@@ -276,7 +276,7 @@ export const ChartGenerator = ({ data, title, type, dataKey = 'value', className
       <CardContent className="space-y-4">
         {/* Chart Visualization */}
         <div className="relative overflow-hidden rounded-lg border border-glass-border/50 bg-card/30 p-4">
-          <ResponsiveContainer width="100%" height={280}>
+          <ResponsiveContainer width="100%" height={400}>
             {renderChart()}
           </ResponsiveContainer>
         </div>

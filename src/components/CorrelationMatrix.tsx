@@ -91,11 +91,11 @@ export const CorrelationMatrix = ({ data, columns }: CorrelationMatrixProps) => 
           <div className="inline-block min-w-full">
             {/* Column headers */}
             <div className="flex">
-              <div className="w-24 shrink-0" /> {/* Empty corner cell */}
+              <div className="w-32 shrink-0" /> {/* Empty corner cell */}
               {columns.map(col => (
                 <div 
                   key={col} 
-                  className="w-24 shrink-0 text-xs font-medium text-muted-foreground p-1 text-center truncate"
+                  className="w-32 shrink-0 text-sm font-medium text-muted-foreground p-2 text-center truncate"
                   title={col}
                 >
                   {col}
@@ -106,7 +106,7 @@ export const CorrelationMatrix = ({ data, columns }: CorrelationMatrixProps) => 
             {/* Matrix rows */}
             {columns.map(row => (
               <div key={row} className="flex">
-                <div className="w-24 shrink-0 text-xs font-medium text-muted-foreground p-1 truncate" title={row}>
+                <div className="w-32 shrink-0 text-sm font-medium text-muted-foreground p-2 truncate" title={row}>
                   {row}
                 </div>
                 {columns.map(col => {
@@ -117,10 +117,10 @@ export const CorrelationMatrix = ({ data, columns }: CorrelationMatrixProps) => 
                   return (
                     <div
                       key={`${row}-${col}`}
-                      className="w-24 shrink-0 p-1"
+                      className="w-32 shrink-0 p-2"
                     >
                       <div
-                        className="relative h-16 rounded flex items-center justify-center text-xs font-medium transition-all hover:scale-105"
+                        className="relative h-20 rounded flex items-center justify-center text-sm font-medium transition-all hover:scale-105"
                         style={{
                           backgroundColor: getCorrelationColor(value),
                           opacity: getCorrelationOpacity(value)

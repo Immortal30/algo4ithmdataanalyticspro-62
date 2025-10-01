@@ -595,21 +595,22 @@ const Index = () => {
                 </div>
 
                 {/* Enhanced Charts */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" data-export="charts-section">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6" data-export="charts-section">
                   {numericColumns.slice(0, 6).map((col, index) => {
                     const chartData = getChartData(col);
                     const chartTypes = ['bar', 'line', 'area', 'pie'] as const;
                     const chartType = chartTypes[index % chartTypes.length];
                     
                     return (
-                      <ChartGenerator
-                        key={`${col}-${index}`}
-                        data={chartData}
-                        title={`${col.replace(/([A-Z])/g, ' $1').trim()} Distribution`}
-                        type={chartType}
-                        dataKey="value"
-                        className="animate-in fade-in-50 duration-500"
-                      />
+                      <div key={`${col}-${index}`} className="min-h-[600px]">
+                        <ChartGenerator
+                          data={chartData}
+                          title={`${col.replace(/([A-Z])/g, ' $1').trim()} Distribution`}
+                          type={chartType}
+                          dataKey="value"
+                          className="h-full animate-in fade-in-50 duration-500"
+                        />
+                      </div>
                     );
                   })}
                 </div>

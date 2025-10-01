@@ -245,7 +245,7 @@ export const AdvancedCharts = ({ data, columns, selectedColumn }: AdvancedCharts
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={500}>
                 <PieChart>
                   <Pie
                     data={chartData.pieData}
@@ -279,7 +279,7 @@ export const AdvancedCharts = ({ data, columns, selectedColumn }: AdvancedCharts
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={500}>
                 <PieChart>
                   <Pie
                     data={chartData.pieData}
@@ -313,7 +313,7 @@ export const AdvancedCharts = ({ data, columns, selectedColumn }: AdvancedCharts
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={500}>
                 <RadarChart data={chartData.radarData}>
                   <PolarGrid strokeDasharray="3 3" />
                   <PolarAngleAxis dataKey="subject" tick={{ fontSize: 12 }} />
@@ -343,7 +343,7 @@ export const AdvancedCharts = ({ data, columns, selectedColumn }: AdvancedCharts
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={500}>
                 <Treemap
                   data={chartData.treemapData.children}
                   dataKey="size"
@@ -368,7 +368,7 @@ export const AdvancedCharts = ({ data, columns, selectedColumn }: AdvancedCharts
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={500}>
                 <FunnelChart>
                   <Tooltip content={<CustomTooltip />} />
                   <Funnel

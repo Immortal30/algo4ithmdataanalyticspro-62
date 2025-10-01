@@ -88,7 +88,7 @@ export const DistributionChart = ({ data, column, type = 'histogram', bins = 20 
         </div>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={350}>
           {type === 'histogram' ? (
             <ComposedChart data={chartDataArray}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted-foreground/20" />
