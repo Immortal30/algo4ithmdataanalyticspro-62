@@ -12,7 +12,7 @@ import { DataMindPro } from "@/components/DataMindPro";
 import { DashboardExport } from "@/components/DashboardExport";
 import { ShareDashboard } from "@/components/ShareDashboard";
 import { DataDashboard } from "@/components/DataDashboard";
-import { DataComparison } from "@/components/DataComparison";
+
 import { VirtualizedTable } from "@/components/VirtualizedTable";
 
 
@@ -20,7 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, TrendingUp, Users, DollarSign, Activity, Database, Brain, Calculator, RefreshCw, Download, MessageSquare, Zap, GitCompare } from "lucide-react";
+import { BarChart3, TrendingUp, Users, DollarSign, Activity, Database, Brain, Calculator, RefreshCw, Download, MessageSquare, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ExcelData {
@@ -512,14 +512,10 @@ const Index = () => {
 
             {/* Tabbed Interface */}
             <Tabs defaultValue="dashboard" className="w-full">
-              <TabsList className="grid w-full grid-cols-8 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
+              <TabsList className="grid w-full grid-cols-7 bg-glass-bg/50 backdrop-blur-sm border border-glass-border">
                 <TabsTrigger value="dashboard" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard
-                </TabsTrigger>
-                <TabsTrigger value="comparison" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
-                  <GitCompare className="h-4 w-4 mr-2" />
-                  Compare Data
                 </TabsTrigger>
                 <TabsTrigger value="natural" className="data-[state=active]:bg-dashboard-primary data-[state=active]:text-white">
                   <Brain className="h-4 w-4 mr-2" />
@@ -736,10 +732,6 @@ const Index = () => {
                 </Card>
               </TabsContent>
 
-              {/* Data Comparison Tab */}
-              <TabsContent value="comparison" className="mt-6">
-                <DataComparison />
-              </TabsContent>
 
               {/* Natural Language to Formula Tab */}
               <TabsContent value="natural" className="mt-6">
