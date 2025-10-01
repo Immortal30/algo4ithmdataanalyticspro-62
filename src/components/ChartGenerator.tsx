@@ -18,12 +18,16 @@ interface ChartGeneratorProps {
 }
 
 const COLORS = [
-  'hsl(var(--dashboard-primary))',
-  'hsl(var(--dashboard-secondary))',
-  'hsl(var(--dashboard-accent))',
-  'hsl(var(--dashboard-warning))',
-  'hsl(var(--dashboard-success))',
-  'hsl(var(--dashboard-danger))',
+  'hsl(220 80% 60%)',     // Vibrant Blue
+  'hsl(150 70% 50%)',     // Green
+  'hsl(280 75% 60%)',     // Purple
+  'hsl(35 90% 55%)',      // Orange
+  'hsl(350 85% 60%)',     // Red
+  'hsl(200 85% 50%)',     // Cyan
+  'hsl(45 95% 55%)',      // Yellow
+  'hsl(320 70% 55%)',     // Magenta
+  'hsl(170 65% 50%)',     // Teal
+  'hsl(10 80% 55%)',      // Coral
 ];
 
 export const ChartGenerator = ({ data, title, type, dataKey = 'value', className }: ChartGeneratorProps) => {
@@ -90,12 +94,6 @@ export const ChartGenerator = ({ data, title, type, dataKey = 'value', className
       case 'bar':
         return (
           <BarChart {...commonProps}>
-            <defs>
-              <linearGradient id={`barGradient-${title.replace(/\s+/g, '-')}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--dashboard-primary))" />
-                <stop offset="100%" stopColor="hsl(var(--dashboard-secondary))" />
-              </linearGradient>
-            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground) / 0.2)" />
             <XAxis 
               dataKey="name" 
@@ -125,9 +123,12 @@ export const ChartGenerator = ({ data, title, type, dataKey = 'value', className
             />
             <Bar 
               dataKey={dataKey} 
-              fill={`url(#barGradient-${title.replace(/\s+/g, '-')})`}
               radius={[4, 4, 0, 0]}
-            />
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Bar>
           </BarChart>
         );
 
