@@ -31,7 +31,16 @@ const COLORS = [
 ];
 
 export const ChartGenerator = ({ data, title, type, dataKey = 'value', className }: ChartGeneratorProps) => {
-  // Calculate insights and statistics
+  // Split data into chunks if too large
+  const CHUNK_SIZE = 500;
+  const shouldSplit = data.length > CHUNK_SIZE;
+  const dataChunks = shouldSplit 
+    ? Array.from({ length: Math.ceil(data.length / CHUNK_SIZE) }, (_, i) => 
+        data.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE)
+      )
+    : [data];
+
+  // Calculate insights and statistics for all data
   const values = data.map(d => d.value).filter(v => typeof v === 'number' && !isNaN(v));
   const total = values.reduce((sum, val) => sum + val, 0);
   const average = values.length > 0 ? total / values.length : 0;
@@ -84,9 +93,9 @@ export const ChartGenerator = ({ data, title, type, dataKey = 'value', className
   
   const insights = generateInsights();
   
-  const renderChart = () => {
+  const renderChart = (chunkData: ChartData[], chunkIndex?: number) => {
     const commonProps = {
-      data,
+      data: chunkData,
       margin: { top: 20, right: 30, left: 20, bottom: 5 },
     };
 
@@ -125,7 +134,7 @@ export const ChartGenerator = ({ data, title, type, dataKey = 'value', className
               dataKey={dataKey} 
               radius={[4, 4, 0, 0]}
             >
-              {data.map((entry, index) => (
+              {chunkData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Bar>
@@ -276,11 +285,20 @@ export const ChartGenerator = ({ data, title, type, dataKey = 'value', className
       
       <CardContent className="space-y-4">
         {/* Chart Visualization */}
-        <div className="relative overflow-hidden rounded-lg border border-glass-border/50 bg-card/30 p-4">
-          <ResponsiveContainer width="100%" height={400}>
-            {renderChart()}
-          </ResponsiveContainer>
-        </div>
+        {dataChunks.map((chunk, index) => (
+          <div key={index} className="space-y-2">
+            {shouldSplit && (
+              <div className="text-sm font-medium text-muted-foreground">
+                Part {index + 1} of {dataChunks.length} (Items {index * CHUNK_SIZE + 1}-{Math.min((index + 1) * CHUNK_SIZE, data.length)})
+              </div>
+            )}
+            <div className="relative overflow-hidden rounded-lg border border-glass-border/50 bg-card/30 p-4">
+              <ResponsiveContainer width="100%" height={400}>
+                {renderChart(chunk, index)}
+              </ResponsiveContainer>
+            </div>
+          </div>
+        ))}
         
         {/* Natural Language Insights */}
         <div className="space-y-3">
