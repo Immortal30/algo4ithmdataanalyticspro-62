@@ -44,7 +44,7 @@ export const DataDashboard = ({ data, fileName, onExport }: DataDashboardProps) 
     const firstRow = data[0];
     return Object.keys(firstRow).filter(key => {
       const value = firstRow[key];
-      return !isNaN(Number(value)) && value !== "" && key !== "id";
+      return !isNaN(Number(value)) && value !== "" && key !== "id" && key !== "";
     });
   }, [data]);
 

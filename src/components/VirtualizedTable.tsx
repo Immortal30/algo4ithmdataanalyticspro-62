@@ -59,7 +59,7 @@ export const VirtualizedTable = ({
   // Get columns from data
   const columns = useMemo(() => {
     if (!data.length) return [];
-    return Object.keys(data[0]).filter(key => key !== 'id');
+    return Object.keys(data[0]).filter(key => key !== 'id' && key !== '');
   }, [data]);
 
   // Filtered and sorted data
